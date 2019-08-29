@@ -30,6 +30,7 @@ class Kindle {
 	get currentEBook() {
 		return this._current;
 	}
+
 	finishCurrentBook() {
 		if (this._current == null) {
 			console.error(
@@ -61,6 +62,9 @@ class Kindle {
 	get library() {
 		return { ...this._library };
 	}
+  get size() {
+		return this._library.length;
+  }
 }
 
 class Ebook {
