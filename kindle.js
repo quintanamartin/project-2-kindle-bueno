@@ -62,9 +62,13 @@ class Kindle {
 	get library() {
 		return { ...this._library };
 	}
-  get size() {
+	get size() {
 		return this._library.length;
-  }
+	}
+
+	filterBy(criteria) {
+		return this._library.filter(x => x.read === criteria);
+	}
 }
 
 class Ebook {
@@ -86,4 +90,3 @@ class Ebook {
 }
 
 const kindle = new Kindle();
-
