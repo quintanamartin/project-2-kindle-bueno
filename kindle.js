@@ -67,7 +67,23 @@ class Kindle {
 	}
 
 	filterBy(criteria) {
-		return this._library.filter(x => x.read === criteria);
+		let auxArr = this._library.slice();
+
+		if (criteria === 'read') {
+			let arrToReturn = auxArr.filter(x => x.read === true);
+			for (const e of arrToReturn) {
+				delete e.read;
+				delete e.readDate;
+			}
+			return arrToReturn;
+		} else if (criteria === 'unread') {
+			let arrToReturn = auxArr.filter(x => x.read === false);
+			for (const e of arrToReturn) {
+				delete e.read;
+				delete e.readDate;
+			}
+			return arrToReturn;
+		}
 	}
 }
 
