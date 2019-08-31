@@ -75,14 +75,25 @@ class Kindle {
 				delete e.read;
 				delete e.readDate;
 			}
-			return arrToReturn;
+
+			if (arrToReturn.length === 0) {
+				return console.log('You have no items that match the selected filters');
+			} else {
+				return arrToReturn;
+			}
 		} else if (criteria === 'unread') {
 			let arrToReturn = auxArr.filter(x => x.read === false);
 			for (const e of arrToReturn) {
 				delete e.read;
 				delete e.readDate;
 			}
-			return arrToReturn;
+			if (arrToReturn.length === 0) {
+				return console.log('You have no items that match the selected filters');
+			} else {
+				return arrToReturn;
+			}
+		} else {
+			return console.log('You have no items that match the selected filters');
 		}
 	}
 }
