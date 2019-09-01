@@ -69,13 +69,18 @@ Este es el proyecto 2, para aplicar lo aprendido hasta el momento de POO en JS, 
   
   - `.currentEBook` **(_getter_)**: retorna un objeto de la forma `{ title: <TITLE>, genre: <GENRE>, author: <AUTHOR>, cover: <COVER> }` con la info del libro actual
   
-  - `.currentEBook(eBook)` **(_setter_)**: setea cualquier libro disponible en el _Kindle_ como el actual (`_current`) y el libro actual (`_current`) pasa a ser el próximo (`_next`). En el caso de que elijamos el mismo libro que ya estamos leyendo, no hacer nada
+  - `.currentEBook(eBook)` **(_setter_)**: setea cualquier libro disponible en el _Kindle_ como el actual (`_current`) y el libro actual (`_current`) pasa a ser el próximo (`_next`). En el caso de que elijamos el mismo libro que ya estamos leyendo, no hacer nada. En el caso de que se intente setear un libro que no se encuentre en el Kindle, mostrar el mensaje de error 'The eBook must belong to the library. Add it first'
     
-  - `.filterBy(criteria)`: retorna un _array_ de los eBooks ya leídos o bo leídos aún, según si se recibe el _string_ `'read'` o `'unread'` como parámetro
+  - `.filterBy(criteria)`: retorna un _array_ de los eBooks ya leídos o bo leídos aún (de la forma { title: <TITLE>, genre: <GENRE>, author: <AUTHOR>, cover: <COVER> }) ya leídos o no leídos aún, según si se recibe el _string_ `'read'` o `'unread'` como parámetro. En el caso de que no haya resultados, se debe mostrar el siguiente mensaje en consola: _'You have no items that match the selected filters'_
   
-  - `.search(keywords)`: retorna un _array_ de los eBooks que incluyan las _keywords_ en `title` o `author`, sin importar si están en mayúscula o minúscula (no es _case sensitive_)
+  - `.search(keywords)`: retorna un _array_ de los eBooks (de la forma { title: <TITLE>, genre: <GENRE>, author: <AUTHOR>, cover: <COVER> }) que incluyan las _keywords_ en `title` o `author`, sin importar si están en mayúscula o minúscula (no es _case sensitive_). En el caso de que no haya resultados, se debe mostrar el siguiente mensaje en consola: _'There are no results found in your library'_. **Nota**: los espacios al principio y al final de keywords deben ignorarse
   
-  - `sortBy(criteria)`: retorna un _array_ de los _eBooks_ ordenado (de forma ascendente) por `title` o `author`, según si se recibe el _string_ `'title'` o `'author'` como parámetro
+  - `sortBy(criteria)`: retorna un _array_ de los _eBooks_ (de la forma { title: <TITLE>, genre: <GENRE>, author: <AUTHOR>, cover: <COVER> }) ordenado (de forma ascendente) por `title` o `author`, según si se recibe el _string_ `'title'` o `'author'` como parámetro
+
+  - **Nuevos métodos de Kindle (29/08):**
+
+	- `.recentSearches:` muestra las últimas 5 búsquedas realizadas usando `.search` (Nota: sólo guarda las últimas 5)
+	- `.clearHistory:` limpia las búsquedas recientes
 
 ## Observaciones
 
