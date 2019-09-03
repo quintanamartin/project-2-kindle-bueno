@@ -59,12 +59,28 @@ class Kindle {
 			return "only support 'author' or 'title' criteria";
 		}
 	}
+	search(keywords) {
+		const typedKeyword = keywords.toLowerCase().trim();
+		const result = [];
+		this._library.filter(function(eBook) {
+			if (
+				eBook.title.toLowerCase().includes(typedKeyword) ||
+				eBook.author.toLowerCase().includes(typedKeyword)
+			) {
+				result.push(eBook);
+			}
+		});
+		result.length > 0
+			? console.log(result)
+			: console.log('There are no results found in your library');
+	}
+
 	get library() {
 		return { ...this._library };
 	}
-  get size() {
+	get size() {
 		return this._library.length;
-  }
+	}
 }
 
 class Ebook {
@@ -86,4 +102,3 @@ class Ebook {
 }
 
 const kindle = new Kindle();
-
