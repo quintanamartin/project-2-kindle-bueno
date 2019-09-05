@@ -60,21 +60,25 @@ class Kindle {
 		}
 	}
 	search(keywords) {
-		const typedKeyword = keywords.toLowerCase().trim();
-		const result = [];
-		this._library.filter(function(eBook) {
-			if (
-				eBook.title.toLowerCase().includes(typedKeyword) ||
-				eBook.author.toLowerCase().includes(typedKeyword)
-			) {
-				result.push(eBook);
-			}
-		});
-		result.length > 0
-			? console.log(result)
-			: console.log('There are no results found in your library');
-	}
 
+		const typedKeywords = keywords.toLowerCase().trim();
+
+		const result = ebook =>
+
+      			ebook.author.toLowerCase().includes(typedKeywords) ||
+
+      			ebook.title.toLowerCase().includes(typedKeywords);
+
+ 
+
+    		const bookList = this._library.filter(result);
+
+ 
+
+    		return bookList.length > 0
+
+			? bookList : console.error('There are no results found in your library');
+	}
 	get library() {
 		return { ...this._library };
 	}
