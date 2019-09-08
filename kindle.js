@@ -66,6 +66,26 @@ class Kindle {
 			return console.error("only support 'author' or 'title' criteria");
 		}
 	}
+	search(keywords) {
+
+		const typedKeywords = keywords.toLowerCase().trim();
+
+		const result = ebook =>
+
+      			ebook.author.toLowerCase().includes(typedKeywords) ||
+
+      			ebook.title.toLowerCase().includes(typedKeywords);
+
+ 
+
+    		const bookList = this._library.filter(result);
+
+ 
+
+    		return bookList.length > 0
+
+			? bookList : console.error('There are no results found in your library');
+	}
 	get library() {
 		return [
 			...this._library.map(function(ebook) {
