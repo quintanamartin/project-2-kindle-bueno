@@ -8,8 +8,10 @@ class Kindle {
 		this._library = [];
 		this._read = [];
 		this._unread = [];
+		this._recentSearches = [];
 	}
 	add(eBook) {
+		//if(this.library.map( book => book.isEqual(book, eBook)).length !== 0)
 		if (this._library.some(x => x.title == eBook.title)) {
 			console.warn(`"${eBook.title}" already exists in library`);
 		} else {
@@ -23,7 +25,6 @@ class Kindle {
 			}
 		}
 	}
-	// para q set currentEBOOK solo agregue eBooks del kindle, hay q usarla así: kindle.currentEBook = kindle._library[nro] o hay otra manera?
 	set currentEBook(eBook) {
 		if (this._current != eBook) {
 			this._next = this._current;
@@ -31,14 +32,18 @@ class Kindle {
 		}
 	}
 	get currentEBook() {
-		return this._current;
+		return {
+			...this._current.map(ebook => {
+				delete ebook.read;
+				delete ebook.readDate;
+				return ebook;
+			})
+		};
 	}
 
 	finishCurrentBook() {
 		if (this._current == null) {
-			console.error(
-				'There is no current book to finish, you must add one first.'
-			);
+			console.error('There is no current book to finish, you must add one first.');
 		} else {
 			this._current.read = true;
 			this._current.readDate = Date.now();
@@ -67,24 +72,21 @@ class Kindle {
 		}
 	}
 	search(keywords) {
-
+		this._recentSearches.unshift(keywords);
+		if (this._recentSearches.length > 5) {
+			this._recentSearches.pop();
+		}
 		const typedKeywords = keywords.toLowerCase().trim();
 
 		const result = ebook =>
+			ebook.author.toLowerCase().includes(typedKeywords) ||
+			ebook.title.toLowerCase().includes(typedKeywords);
 
-      			ebook.author.toLowerCase().includes(typedKeywords) ||
+		const bookList = this._library.filter(result);
 
-      			ebook.title.toLowerCase().includes(typedKeywords);
-
- 
-
-    		const bookList = this._library.filter(result);
-
- 
-
-    		return bookList.length > 0
-
-			? bookList : console.error('There are no results found in your library');
+		return bookList.length > 0
+			? bookList
+			: console.error('There are no results found in your library');
 	}
 	get library() {
 		return [
@@ -98,7 +100,14 @@ class Kindle {
 	get size() {
 		return this._library.length;
 	}
-
+	get recentSearches() {
+		return this._recentSearches.length === 0
+			? console.warn('There are not recent searches')
+			: this._recentSearches;
+	}
+	get clearHistory() {
+		this._recentSearches = [];
+	}
 	filterBy(criteria) {
 		return criteria === 'read'
 			? this._read
@@ -119,9 +128,9 @@ class Ebook {
 	}
 	static isEqual(eBookA, eBookB) {
 		return (
-			eBookA.title === eBookB.title &&
-			eBookA.genre === eBookB.genre &&
-			eBookA.author === eBookB.author
+			eBookA.title.toLowerCase() === eBookB.title.toLowerCase() &&
+			eBookA.genre.toLowerCase() === eBookB.genre.toLowerCase() &&
+			eBookA.author.toLowerCase() === eBookB.author.toLowerCase()
 		);
 	}
 }
