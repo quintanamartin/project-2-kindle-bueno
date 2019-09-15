@@ -1,6 +1,6 @@
 import Ebook from './ebook.js';
 
-class Kindle {
+export default class Kindle {
 	constructor() {
 		this.readBooks = 0;
 		this.notYetReadBooks = 0;
