@@ -1,3 +1,8 @@
+import Kindle from './modules/kindle.js';
+import Ebook from './modules/ebook.js';
+
+const kindle = new Kindle();
+
 let ebook = new Ebook({
 	title: 'Drive',
 	genre: 'Psychology',
@@ -51,3 +56,5 @@ ebook = new Ebook({
 });
 
 kindle.add(ebook);
+
+console.log(kindle);

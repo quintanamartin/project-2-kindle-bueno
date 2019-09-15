@@ -1,3 +1,5 @@
+import Ebook from './ebook.js';
+
 class Kindle {
 	constructor() {
 		this.readBooks = 0;
@@ -11,8 +13,7 @@ class Kindle {
 		this._recentSearches = [];
 	}
 	add(eBook) {
-		//if(this.library.map( book => book.isEqual(book, eBook)).length !== 0)
-		if (this._library.some(x => x.title == eBook.title)) {
+		if (this._library.some(book => Ebook.isEqual(book, eBook))) {
 			console.warn(`"${eBook.title}" already exists in library`);
 		} else {
 			this._library.push(eBook);
@@ -116,23 +117,3 @@ class Kindle {
 			: console.error('You have no items that match the selected filters');
 	}
 }
-
-class Ebook {
-	constructor(eBook) {
-		this.title = eBook.title;
-		this.genre = eBook.genre;
-		this.author = eBook.author;
-		this.cover = eBook.cover;
-		this.read = false;
-		this.readDate = null;
-	}
-	static isEqual(eBookA, eBookB) {
-		return (
-			eBookA.title.toLowerCase() === eBookB.title.toLowerCase() &&
-			eBookA.genre.toLowerCase() === eBookB.genre.toLowerCase() &&
-			eBookA.author.toLowerCase() === eBookB.author.toLowerCase()
-		);
-	}
-}
-
-const kindle = new Kindle();
