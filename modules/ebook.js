@@ -1,17 +1,20 @@
 export default class Ebook {
-	constructor(eBook) {
-		this.title = eBook.title;
-		this.genre = eBook.genre;
-		this.author = eBook.author;
-		this.cover = eBook.cover;
+	constructor({ title, genre, author, cover }) {
+		this.title = title;
+		this.genre = genre;
+		this.author = author;
+		this.cover = cover;
 		this.read = false;
 		this.readDate = null;
 	}
-	static isEqual(eBookA, eBookB) {
+	static isEqual(
+		{ title, genre, author },
+		{ title: title2, genre: genre2, author: author2 }
+	) {
 		return (
-			eBookA.title.toLowerCase() === eBookB.title.toLowerCase() &&
-			eBookA.genre.toLowerCase() === eBookB.genre.toLowerCase() &&
-			eBookA.author.toLowerCase() === eBookB.author.toLowerCase()
+			title.toLowerCase() === title2.toLowerCase() &&
+			genre.toLowerCase() === genre2.toLowerCase() &&
+			author.toLowerCase() === author2.toLowerCase()
 		);
 	}
 }

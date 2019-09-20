@@ -13,7 +13,7 @@ export default class Kindle {
 		this._recentSearches = [];
 	}
 	add(eBook) {
-		if (this._library.some(book => Ebook.isEqual(book, eBook))) {
+		if (this._library.some(libraryEbook => Ebook.isEqual(libraryEbook, eBook))) {
 			console.warn(`"${eBook.title}" already exists in library`);
 		} else {
 			this._library.push(eBook);
@@ -91,7 +91,7 @@ export default class Kindle {
 	}
 	get library() {
 		return [
-			...this._library.map(function(ebook) {
+			...this._library.map(ebook => {
 				delete ebook.read;
 				delete ebook.readDate;
 				return ebook;
@@ -107,7 +107,7 @@ export default class Kindle {
 			: this._recentSearches;
 	}
 	get clearHistory() {
-		this._recentSearches = [];
+		this._recentSearches.splice(0, this._recentSearches.length);
 	}
 	filterBy(criteria) {
 		return criteria === 'read'
