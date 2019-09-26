@@ -33,13 +33,10 @@ export default class Kindle {
 		}
 	}
 	get currentEBook() {
-		return {
-			...this._current.map(ebook => {
-				delete ebook.read;
-				delete ebook.readDate;
-				return ebook;
-			})
-		};
+		let current = this._current;
+		delete current.read;
+		delete current.readDate;
+		return current;
 	}
 
 	finishCurrentBook() {
