@@ -57,4 +57,22 @@ ebook = new Ebook({
 
 kindle.add(ebook);
 
+kindle.finishCurrentBook();
+kindle.finishCurrentBook();
+
 console.log(kindle);
+
+console.log(kindle.library);
+console.log(kindle.filterBy('unread'));
+console.log(kindle.filterBy('read'));
+console.log(kindle.filterBy('hola'));
+
+console.log(kindle.search('java'));
+console.log(kindle.recentSearches);
+
+console.log(kindle.sortBy('author'));
+console.log(kindle.sortBy('title'));
+
+console.log(kindle.sortBy('fruta'));
+
+console.log(kindle.currentEBook);
