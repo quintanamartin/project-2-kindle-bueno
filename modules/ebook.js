@@ -4,8 +4,6 @@ export default class Ebook {
 		this.genre = genre;
 		this.author = author;
 		this.cover = cover;
-		this.read = false;
-		this.readDate = null;
 	}
 	static isEqual(
 		{ title, genre, author },
