@@ -62,17 +62,32 @@ kindle.finishCurrentBook();
 
 console.log(kindle);
 
+console.log('===========lirary===================');
 console.log(kindle.library);
+console.log('===========filtersssss============');
 console.log(kindle.filterBy('unread'));
 console.log(kindle.filterBy('read'));
 console.log(kindle.filterBy('hola'));
+console.log('=========== search ===================');
 
 console.log(kindle.search('java'));
-console.log(kindle.recentSearches);
 
+console.log('===========seeing recent searches');
+console.log(kindle.status.recentSearches);
+console.log('===========sort by ===================');
 console.log(kindle.sortBy('author'));
 console.log(kindle.sortBy('title'));
 
 console.log(kindle.sortBy('fruta'));
+console.log('===========ssearches ===================');
 
 console.log(kindle.currentEBook);
+
+console.log(kindle.search('c'));
+console.log(kindle.search('the'));
+
+console.log('=========== recent searches===================');
+console.log(kindle.status.recentSearches.show());
+console.log('========== clear searches ===================');
+kindle.status.recentSearches.clear();
+console.log(kindle.status.recentSearches);

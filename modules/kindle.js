@@ -1,24 +1,29 @@
 import Ebook from './ebook.js';
+import Buffer from './buffer.js';
 
 export default class Kindle {
 	constructor() {
-		this.readBooks = 0;
-		this.notYetReadBooks = 0;
 		this._current = null;
 		this._next = null;
+		this.ebookState = new Map();
 		this._last = null;
-		this._library = [];
-		this._read = [];
-		this._unread = [];
-		this._recentSearches = [];
+		this.library = [];
+		this.status = {
+			readBooks: 0,
+			notYetReadBooks: 0,
+			recentSearches: new Buffer({ size: 4, init: '' })
+		};
+	}
+	_wasRead(ebook) {
+		return this.ebookState.get(ebook).read;
 	}
 	add(eBook) {
-		if (this._library.some(libraryEbook => Ebook.isEqual(libraryEbook, eBook))) {
+		if (this.library.some(libraryEbook => Ebook.isEqual(libraryEbook, eBook))) {
 			console.warn(`"${eBook.title}" already exists in library`);
 		} else {
-			this._library.push(eBook);
-			this._unread.push(eBook);
-			this.notYetReadBooks++;
+			this.library.push(eBook);
+			this.ebookState.set(eBook, { read: false, date: null });
+			this.status.notYetReadBooks++;
 			if (this._current === null) {
 				this._current = eBook;
 			} else if (this._next === null) {
@@ -33,27 +38,25 @@ export default class Kindle {
 		}
 	}
 	get currentEBook() {
-		let current = this._current;
-		delete current.read;
-		delete current.readDate;
-		return current;
+		if (this._current === null) {
+			console.error('There is not current eBook. Select one first');
+		}
+		return { ...this._current };
 	}
 
 	finishCurrentBook() {
 		if (this._current == null) {
 			console.error('There is no current book to finish, you must add one first.');
 		} else {
-			this._current.read = true;
-			this._current.readDate = Date.now();
-			this._read.push(
-				...this.library.filter(x => x.title === this._current.title)
-			);
-			this._unread = this.library.filter(x => x.title !== this._current.title);
+			this.ebookState.set(this._current, { read: true, date: Date.now() });
+			//console.log(this.ebookState.get(this._current));
 			this._last = this._current;
 			this._current = this._next;
-			this._next = this._library.find(x => !x.read && x != this._current);
-			this.notYetReadBooks--;
-			this.readBooks++;
+			this._next = this.library.find(
+				x => !this.ebookState.get(x).read && x != this._current
+			);
+			this.status.notYetReadBooks--;
+			this.status.readBooks++;
 		}
 	}
 	sortBy(criteria) {
@@ -66,51 +69,39 @@ export default class Kindle {
 				a.title > b.title ? 1 : b.title > a.title ? -1 : 0
 			);
 		} else {
-			return console.error("only support 'author' or 'title' criteria");
+			console.error("only support 'author' or 'title' criteria");
 		}
 	}
 	search(keywords) {
-		this._recentSearches.unshift(keywords);
-		if (this._recentSearches.length > 5) {
-			this._recentSearches.pop();
-		}
+		this.status.recentSearches.add(keywords);
 		const typedKeywords = keywords.toLowerCase().trim();
 
 		const result = ebook =>
 			ebook.author.toLowerCase().includes(typedKeywords) ||
 			ebook.title.toLowerCase().includes(typedKeywords);
 
-		const bookList = this._library.filter(result);
+		const bookList = this.library.filter(result);
 
 		return bookList.length > 0
 			? bookList
 			: console.error('There are no results found in your library');
 	}
-	get library() {
-		return [
-			...this._library.map(ebook => {
-				delete ebook.read;
-				delete ebook.readDate;
-				return ebook;
-			})
-		];
-	}
 	get size() {
-		return this._library.length;
+		return this.library.length;
 	}
 	get recentSearches() {
-		return this._recentSearches.length === 0
-			? console.warn('There are not recent searches')
-			: this._recentSearches;
+		return this.status.recentSearches.show();
 	}
 	get clearHistory() {
-		this._recentSearches.splice(0, this._recentSearches.length);
+		this.status.recentSearches.clear();
 	}
 	filterBy(criteria) {
 		return criteria === 'read'
-			? this._read
+			? this.library.filter(ebook => this._wasRead(ebook) === true)
 			: criteria === 'unread'
-			? this._unread
-			: console.error('You have no items that match the selected filters');
+			? this.library.filter(ebook => this._wasRead(ebook) === false)
+			: console.error(
+					'You have no items that match the selected filters ' + criteria
+			  );
 	}
 }
